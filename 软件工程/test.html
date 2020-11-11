@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>您还没有登陆</p>
+	用户名:<input type="text" id='user'><br>
+	密  码:<input type="text" id='pass'><br>
+	<input type="button" value='登陆' id='toLogin'>
+    <input type="button" value='注册' id='add'>
+    <input type="button" value='删除' id='del'><br>
+    姓名:<input type="text" id='username'><br>
+    生日:<input type="text" id='birthday'><br>
+    性别:<input type="text" id='sex'><br>
+    年龄:<input type="text" id='age'><br>
+    年级:<input type="text" id='grade'><br>
+    手机:<input type="text" id='phone'><br>
+    地址:<input type="text" id='address'><br>
+    <input type="button" value='修改' id='upd'>
+    <input type="button" value='修改成绩' id='updscorce'>
+    <input type="button" value='查询' id='findNote'>
+    
+    <form action="./print" method="POST">
+        <textarea name="txt" id="" cols="30" rows="10"></textarea><br>
+        
+    </form>
+    <input type="submit" value="打印" id='printNode'>
+    
+</body>
+<script type="text/javascript">
+		
+    add.onclick = function(){
+        if(!user.value || !pass.value){
+            alert('请补起用户名和密码');
+            return;
+        };
+        fetch(`/register?user=${user.value}&pass=${pass.value}`).then(res=>res.text()).then(x=>{
+            x=JSON.parse(x);
+            if(x.status == 200){
+                alert(x.message);
+            }
+            else{
+                alert(x.message);
+            }
+        })
+    };
+
+    toLogin.onclick = function(){
+        if(!user.value || !pass.value){
+            alert('请补起用户名和密码');
+            return;
+        };
+        fetch(`/login`,{method:"POST",
+                body:`user=${user.value}&pass=${pass.value}`,
+                headers:{'Content-Type':'application/x-www-form-urlencoded'}}).then(res=>res.text()).then(x=>{
+            //alert(x);
+                x=JSON.parse(x);
+            if(x.status == 200){
+                alert(x.message);
+            }
+            else{
+                alert(x.message);
+            }
+        })
+    };
+    
+    del.onclick=function(){
+        if(!user.value || !pass.value){
+            alert('请补起用户名和密码');
+            return;
+        };
+        fetch(`/deleteUser?user=${user.value}`).then(res=>res.text()).then(x=>{
+            x=JSON.parse(x);
+            if(x.status == 200){
+                alert(x.message);
+            }
+            else{
+                alert(x.message);
+            }
+        })
+    }
+
+    upd.onclick=function(){
+        var UpdMsg={
+            userId:user.value,
+            password:pass.value,
+            username:username.value,
+            age:age.value,
+            birthday: birthday.value,
+            grade: grade.value,//年级
+            gender:sex.value,
+            phone:phone.value,
+            address:address.value
+        };
+        UpdMsg=JSON.stringify(UpdMsg);
+        console.log(UpdMsg);
+        fetch(`/update`,{method:"POST",
+                body:`UpdMsg=${UpdMsg}`,
+                headers:{'Content-Type':'application/x-www-form-urlencoded'}}).then(res=>res.text()).then(x=>{
+            //alert(x);
+                x=JSON.parse(x);
+            if(x.status == 200){
+                alert(x.message);
+            }
+            else{
+                alert(x.message);
+            }
+        })
+    }
+
+    updscorce.onclick=function(){
+        let userMsg={userId:"leo",
+            username:"M",
+            grade: "2018",//年级
+            semester:"大二下",//学期
+            Credit: "56",//学分
+            Period: "68",//学时
+            Course1: "66",//课程1成绩
+            Course2:"66",
+            Course3:"66",
+            Course4:"66",
+            Scores:"98",//总分
+            GPA:"3.0",//绩点
+        };
+        // let userMsg={userId:"leo2",
+        //     username:"M",
+        //     grade: "2018",//年级
+        //     semester:"大二下",//学期
+        //     Credit: "56",//学分
+        //     Period: "68",//学时
+        //     Course1: "98",//课程1成绩
+        //     Course2:"92",
+        //     Course3:"99",
+        //     Course4:"80",
+        //     Scores:"98",//总分
+        //     GPA:"3.5",//绩点
+        // };
+        userMsg=JSON.stringify(userMsg);
+        fetch(`/addMsg`,{method:"POST",
+                body:`UpMsg=${userMsg}`,
+                headers:{'Content-Type':'application/x-www-form-urlencoded'}}).then(res=>res.text()).then(x=>{
+            //alert(x);
+                x=JSON.parse(x);
+            if(x.status == 200){
+                alert(x.message);
+            }
+            else{
+                alert(x.message);
+            }
+        })
+    }
+
+    findNote.onclick=function(){
+        let userMsg={userId:"leo2"};
+        userMsg=JSON.stringify(userMsg);//传递时一定要先转换成字符串
+        fetch(`/getMsg?UpMsg=${userMsg}`).then(res=>res.text()).then(x=>{
+            x=JSON.parse(x);
+            if(x.status == 200){
+                alert(x.message);
+            }
+            else{
+                alert(x.message);
+            }
+        })
+    }
+
+    printNode.onclick=function(){
+        let userMsg={userId:"leo2"};
+        userMsg=JSON.stringify(userMsg);//传递时一定要先转换成字符串
+        fetch(`/Stream?UpMsg=${userMsg}`);
+        
+    }
+
+</script>
+</html>
